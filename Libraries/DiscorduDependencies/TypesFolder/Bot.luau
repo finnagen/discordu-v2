@@ -1,5 +1,3 @@
---!nocheck
-
 local types = require('../types')
 local net = require('@lune/net')
 
@@ -59,11 +57,11 @@ type connections = {
 
 type bot_methods = {
     Run: (self: Bot) -> (),
-    NetRequest: (self: Bot, method: string, url_path: string, body: any?, headers: {string}?) -> any?,
+    NetRequest: (self: Bot, method: string, url_path: string, body: any?, headers: {[string]: string}?) -> any?,
     End: (self: Bot) -> (),
     On: (self: Bot, event: string, callback: (...any) -> ()) -> (),
+    
     DisconnectListener: (self: Bot, event: string) -> (),
-
     DisconnectTask: (self: Bot, task_to_cancel: string) -> (),
 
     _Identify: (self: Bot, shard: number) -> (),
