@@ -5,6 +5,25 @@ Discordu is an advanced multi-module library that allows you to create complex d
 It's still heavily WIP and destined to change, so beware of frequent changes (as of 23/12/2025). It's designed to above all have easily readable syntax; though, I still *have* to make good memory management and functionality. >:(
 
 Heavily inspired by [Nocturn](https://github.com/thekingofspace/Nocturn), a back-end base for Luau-Discord botting.
+# Example Bot
+```lua
+--// test-bot.luau
+  local discordu = require('./Libraries/Discordu/')
+  local intents_module = discordU.intents
+
+  local bot_intents = intents_module.default()
+  bot_intents.message_content = true
+
+  local bot = discordu.Bot('YOUR_TOKEN_HERE', bot_intents)
+  bot_intents = nil -- memory saving :3
+
+  bot:on_ready(ready_packet)
+    print(`Logged in as {bot.user.username}!`
+  end
+
+  bot:Run() -- This should be done after connection assignments (bot:On(), etc.) and before constructors (bot:slash_command(), bot:create_dm(), etc.)
+```
+
 # Features
 Most, if not all, features that are inside of Discordu. Will likely move this to a documentation site once I find the energy to do so.
 ## Bot
