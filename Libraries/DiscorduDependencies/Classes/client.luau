@@ -133,8 +133,8 @@ function client.client_methods.Run(self: Bot): ()
 end
 
 function client.client_methods.End(self: Bot)
-    if self._tasks["end"] ~= nil then
-        self._tasks["end"]()
+    if self._tasks["ending"] ~= nil then
+        self._tasks["ending"]()
     end
 
     for _, v in self._tasks do
@@ -144,8 +144,11 @@ function client.client_methods.End(self: Bot)
 
     self._started = false
 
-    if self._gateway ~= nil then
-        self._gateway:close(4000)
+    for shard_id, shard in self._shards do
+        local gateway = self._gateways[shard_id]
+        if gateway ~= nil then
+            gateway:close(4000)
+        end
     end
 end
 
