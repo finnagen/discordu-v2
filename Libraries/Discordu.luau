@@ -18,8 +18,10 @@ type discordU_client_methods = {
     --/// POST FUNCTIONS
     send_message: (self: Bot, message: types.message_args, channel_id: string, reply: types.message?, guild_id: string?) -> types.message?,
     slash_command: (self: Bot, arguments: types.slash_command_args, listener: (interaction: interaction.Command_Interaction) -> (), guilds: {string}?) -> {types.slash_command}?,
-    delete_slash_command: (self: Bot, name: string, guilds: {string}?) -> (),
     create_dm: (self: Bot, user: types.user | string) -> types.channel?,
+
+    --/// DELETE FUNCTIONS
+    delete_slash_command: (self: Bot, name: string, guilds: {string}?) -> (),
 }
 
 export type Bot = client.Bot & discordU_client_methods
