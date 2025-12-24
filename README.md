@@ -3,6 +3,8 @@ An advanced Discord API wrapper written entirely in luau.
 # Overview
 Discordu is an advanced multi-module library that allows you to create complex discord bots with Roblox's Luau language. The library is powered by [Lune](https://github.com/lune-org/lune), a stand-alone Luau runtime.
 It's still heavily WIP and destined to change, so beware of frequent changes (as of 23/12/2025). It's designed to above all have easily readable syntax; though, I still *have* to make good memory management and functionality. >:(
+
+Heavily inspired by [Nocturn](https://github.com/thekingofspace/Nocturn), a back-end base for Luau-Discord botting.
 # Features
 Most, if not all, features that are inside of Discordu.
 ## Bot
