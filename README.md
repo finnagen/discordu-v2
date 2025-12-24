@@ -6,7 +6,7 @@ It's still heavily WIP and destined to change, so beware of frequent changes (as
 
 Heavily inspired by [Nocturn](https://github.com/thekingofspace/Nocturn), a back-end base for Luau-Discord botting.
 # Features
-Most, if not all, features that are inside of Discordu.
+Most, if not all, features that are inside of Discordu. Will likely move this to a documentation site once I find the energy to do so.
 ## Bot
 The **Bot** class is provided directly by the Discordu module. It represents the heart of your bot, handling things such as:
 > - API Requests
@@ -30,7 +30,7 @@ The bot's user object. *This will only be assigned after the bot has recieved th
 The bot's heartbeat ACK latency. *This will only be assigned after the bot has recieved a Heartbeat ACK event from Discord's API.*
 #### Bot.interaction_latency: number?
 The bot's interaction latency. *This will only be assigned after the bot has recieved an INTERACTION_CREATE event from Discord's API.*
-### Methods
+### Client Methods
 > This will only display select **client.luau** methods.
 #### Bot:Run() -> ()
 Begins all bot connections, including:
@@ -45,3 +45,17 @@ Cancels all bot tasks, connections, and gateways, effectively "turning off" the 
 Creates a direct request from the bot to the Discord API. This will throw an error if Discord responds with one.
 #### Bot:On(event: string, callback: (...any) -> ()) -> ()
 Adds a listener (callback) for a specified Gateway Event on the client.
+### Discordu methods
+> This will display all **Discordu.luau** methods for the bot.
+#### Bot:on_ready(callback: (...any) -> ()) -> ()
+Wraps a call to Bot:On("READY", callback).
+#### Bot:send_message(message: types.message_args, channel_id: string, reply: types.message?, guild_id: string?) -> types.message?
+Wraps a call to **messages.luau**.create_message(Bot, channel_id, message, reply, guild_id).
+#### Bot:slash_command(arguments: types.slash_command_args, listener: (interaction: **interaction.luau**.Command_Interaction) -> (), guild_ids: {string}?) -> {types.slash_command}?
+Creates/gets a slash command from the bot. If guild_ids is nil, the command will be global.
+If the command is global, it will return a table with a single command object. Guild commands will return every command object created.
+#### Bot:create_dm(user: types.user | string) -> types.channel?
+Creates a dm with the specified user/user id. Returns the DMChannel created.
+#### Bot:delete_slash_command(name: string, guilds: {string}?) -> (),
+Sends a delete request for the specified command names and/or guild ids, may take a while for Discord to process these requests, especially for global commands.
+The command **must** be cached by the bot to be deleted. This means if you with to delete a command, you must send a Bot:slash_command() of the command and/or guilds before calling this method.
