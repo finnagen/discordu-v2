@@ -22,7 +22,24 @@ The class itself is divided into 3 modules. The **Bot.luau** file simply stores 
 The bot's application's snowflake ID. *Note that this is separate from the application property due to how many methods require the application ID instead of the entire object.*
 #### Bot.application: types.application?*
 The bot's application object.
-#### user: types.user?
+#### Bot.user: types.user?
 The bot's user object. *This will only be assigned after the bot has recieved the ready event from Discord's API.*
+#### Bot.latency: number?
+The bot's heartbeat ACK latency. *This will only be assigned after the bot has recieved a Heartbeat ACK event from Discord's API.*
+#### Bot.interaction_latency: number?
+The bot's interaction latency. *This will only be assigned after the bot has recieved an INTERACTION_CREATE event from Discord's API.*
 ### Methods
-> This will only list **public** methods of the class.
+> This will only display select **client.luau** methods.
+#### Bot:Run() -> ()
+Begins all bot connections, including:
+> - Gateway Handling
+> - Heartbeats
+> - Identifying/Resuming
+> - Command/Event listening
+> - Assigning some variables.
+#### Bot:End() -> ()
+Cancels all bot tasks, connections, and gateways, effectively "turning off" the bot.
+#### Bot:NetRequest(method: string, url_path: string, body: any?, headers: {[string]: string}) -> any?
+Creates a direct request from the bot to the Discord API. This will throw an error if Discord responds with one.
+#### Bot:On(event: string, callback: (...any) -> ()) -> ()
+Adds a listener (callback) for a specified Gateway Event on the client.
