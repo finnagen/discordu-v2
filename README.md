@@ -18,7 +18,7 @@ Heavily inspired by [Nocturn](https://github.com/thekingofspace/Nocturn), a back
   bot_intents = nil -- memory saving :3
 
   bot:on_ready(ready_packet)
-    print(`Logged in as {bot.user.username}!`
+    print(`Logged in as {bot.user.username}!`)
   end
 
   bot:Run() -- This should be done after connection assignments (bot:On(), etc.) and before constructors (bot:slash_command(), bot:create_dm(), etc.)
