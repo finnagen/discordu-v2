@@ -8,20 +8,20 @@ Heavily inspired by [Nocturn](https://github.com/thekingofspace/Nocturn), a back
 # Example Bot
 ```lua
 --// test-bot.luau
-  local discordu = require('./Libraries/Discordu/')
-  local intents_module = discordU.intents
+local discordu = require('./Libraries/Discordu/')
+local intents_module = discordU.intents
 
-  local bot_intents = intents_module.default()
-  bot_intents.message_content = true
+local bot_intents = intents_module.default()
+bot_intents.message_content = true
 
-  local bot = discordu.Bot('YOUR_TOKEN_HERE', bot_intents)
-  bot_intents = nil -- memory saving :3
+local bot = discordu.Bot('TOKEN', bot_intents)
+bot_intents = nil -- memory saving :3
 
-  bot:on_ready(ready_packet)
+bot:on_ready(function (ready_packet))
     print(`Logged in as {bot.user.username}!`)
-  end
+end
 
-  bot:Run() -- This should be done after connection assignments (bot:On(), etc.) and before constructors (bot:slash_command(), bot:create_dm(), etc.)
+bot:Run()
 ```
 
 # How to run
