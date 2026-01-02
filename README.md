@@ -24,6 +24,19 @@ Heavily inspired by [Nocturn](https://github.com/thekingofspace/Nocturn), a back
   bot:Run() -- This should be done after connection assignments (bot:On(), etc.) and before constructors (bot:slash_command(), bot:create_dm(), etc.)
 ```
 
+# How to run
+## WINDOWS:
+There are two options on Windows to run a `.luau` file with Lune:
+### OPTION 1 | BATCH
+> - Create a `.bat` file in your directory (`lune.exe` and your `.luau` file should be in the same folder).
+> - Insert the code: `lune run (.luau filename)`. You do not need to add `.luau` to the end.
+> - Run the `.bat` file.
+### OPTION 2 | TERMINAL
+> - Insert the code: `.\lune run (.luau filename)` into your terminal. You do not need to add `.luau` to the end.
+> - Run the code.
+## MACOS/LINUX GUIDE UNAVAIABLE FOR NOW.
+> I don't know how :(
+
 # Features
 Most, if not all, features that are inside of Discordu. Will likely move this to a documentation site once I find the energy to do so.
 ## Bot
