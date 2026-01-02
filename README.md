@@ -8,13 +8,13 @@ Heavily inspired by [Nocturn](https://github.com/thekingofspace/Nocturn), a back
 # Example Bot
 ```lua
 --// test-bot.luau
-local discordu = require('./Libraries/Discordu/')
-local intents_module = discordU.intents
+local discordu = require('./Libraries/Discordu')
+local intents_module = discordu.intents
 
 local bot_intents = intents_module.default()
 bot_intents.message_content = true
 
-local bot = discordu.Bot('TOKEN', bot_intents)
+local bot = discordu.Bot('token', bot_intents)
 bot_intents = nil -- memory saving :3
 
 bot:on_ready(function (ready_packet)
