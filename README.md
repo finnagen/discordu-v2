@@ -17,9 +17,9 @@ bot_intents.message_content = true
 local bot = discordu.Bot('TOKEN', bot_intents)
 bot_intents = nil -- memory saving :3
 
-bot:on_ready(function (ready_packet))
+bot:on_ready(function (ready_packet)
     print(`Logged in as {bot.user.username}!`)
-end
+end)
 
 bot:Run()
 ```
