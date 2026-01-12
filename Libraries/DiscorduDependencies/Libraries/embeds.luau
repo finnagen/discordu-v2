@@ -23,6 +23,7 @@ function embeds.Embed(embed_template: types.embed_args): types.embed
         author = embed_template.author,
         fields = embed_template.fields,
         thumbnail = embed_template.thumbnail,
+        image = embed_template.image,
     }
 
     return new_embed

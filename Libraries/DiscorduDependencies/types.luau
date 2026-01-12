@@ -267,9 +267,23 @@ export type message_interaction = {
     member: guild_member?,
 }
 
-export type message_component = {
+export type component_row = {
     type: number,
-    id: string?,
+    components: {button},
+}
+
+export type message_component = component_row
+
+export type button_args = {
+    type: number,
+
+    custom_id: string?,
+    url: string?,
+
+    style: number,
+    emoji: emoji?,
+
+    disabled: boolean?,
 }
 
 export type attachment = {
@@ -354,6 +368,21 @@ export type embed_thumbnail = {
     width: number?,
 }
 
+export type button = {
+    type: number,
+    id: number?,
+
+    style: number,
+    label: string?,
+    emoji: string?,
+
+    custom_id: string,
+    sku_id: string?,
+
+    url: string?,
+    disabled: boolean?,
+}
+
 export type embed = {
     title: string?,
     type: string?,
@@ -382,6 +411,7 @@ export type embed_args = {
     footer: embed_footer?,
     author: embed_author?,
     fields: {embed_field}?,
+    image: embed_image?,
     thumbnail: embed_thumbnail?,
 }
 
@@ -548,7 +578,7 @@ export type interaction_data = {
     resolved: any?,
 }
 
-export type command_interaction = {
+export type interaction = {
     type: number,
     token: string,
 
@@ -889,20 +919,4 @@ export type guild_member = {
 
 --// CONVERSION TABLES
 local types = {}
-
-types.COMMAND_TYPE_CONVERSION = {
-    Forward = {
-        CHAT_INPUT = 1,
-        USER = 2,
-        MESSAGE = 3,
-        PRIMARY_ENTRY_POINT = 4
-    },
-    Reverse = {
-        "CHAT_INPUT",
-        "USER",
-        "MESSAGE",
-        "PRIMARY_ENTRY_POINT"
-    },
-}
-
 return types

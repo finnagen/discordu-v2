@@ -14,10 +14,14 @@ local types = require('./DiscorduDependencies/types')
 type discordU_client_methods = {
     --/// LISTENERS
     on_ready: (self: Bot, callback: (...any) -> ()) -> (),
+    listen_for_button: (self: Bot, button_custom_id: string, listener: (interaction: interaction.interaction) -> ()) -> (),
 
     --/// POST FUNCTIONS
     send_message: (self: Bot, message: types.message_args, channel_id: string, reply: types.message?, guild_id: string?) -> types.message?,
-    slash_command: (self: Bot, arguments: types.slash_command_args, listener: (interaction: interaction.Command_Interaction) -> (), guilds: {string}?) -> {types.slash_command}?,
+    get_reactions: (self: Bot, message: types.message, reaction_emoji: types.emoji) -> {types.user},
+    add_reaction: (self: Bot, message: types.message, reaction_emoji: types.emoji) -> (),
+
+    slash_command: (self: Bot, arguments: types.slash_command_args, listener: (interaction: interaction.interaction) -> (), guilds: {string}?) -> {types.slash_command}?,
     create_dm: (self: Bot, user: types.user | string) -> types.channel?,
 
     --/// DELETE FUNCTIONS
@@ -35,9 +39,39 @@ local discordU = {
     types = types,
 }
 
+--// PRIVATE FUNCTIONS \\--
+local char_to_hex = function(c)
+    return string.format("%%%02X", string.byte(c))
+end
+
+local function url_encode(url)
+    if url == nil then
+        return
+    end
+
+    return url:gsub("([^%w%-_%.~])", char_to_hex)
+end -- this code is from https://gist.github.com/liukun/f9ce7d6d14fa45fe9b924a3eed5c3d99
+
 --// MAIN FUNCTIONS
 function client.client_methods.on_ready(self: Bot, callback: (...any) -> ()): ()
     self:On("READY", callback)
+end
+
+function client.client_methods.get_reactions(self: Bot, message: types.message, reaction_emoji: types.emoji): {user}
+    local emoji_id = reaction_emoji.id and `{reaction_emoji.name}:{reaction_emoji.id}` or reaction_emoji.name
+    emoji_id = url_encode(emoji_id)
+
+    local endpoint = `channels/{message.channel_id}/messages/{message.id}/reactions/{emoji_id}`
+    return self.NetRequest(self, "get", endpoint)
+end
+
+function client.client_methods.add_reaction(self: Bot, message: types.message, reaction_emoji: types.emoji)
+    local emoji_id = reaction_emoji.id and `{reaction_emoji.name}:{reaction_emoji.id}` or reaction_emoji.name
+    emoji_id = url_encode(emoji_id)
+
+    local endpoint = `channels/{message.channel_id}/messages/{message.id}/reactions/{emoji_id}/@me`
+
+    self:NetRequest("put", endpoint)
 end
 
 function client.client_methods.create_dm(self: Bot, user: types.user | string): types.channel?
@@ -56,7 +90,11 @@ function client.client_methods.send_message(self: Bot, message: types.message_ar
     return messages.create_message(self, channel_id, message, reply, guild_id)
 end
 
-function client.client_methods.slash_command(self: Bot, arguments: types.slash_command_args, listener: (interaction: interaction.Command_Interaction) -> (), guilds: {string}?): {types.slash_command}?
+function client.client_methods.listen_for_button(self: Bot, button_custom_id: string, listener: (interaction: interaction.interaction, ...any) -> ()): ()
+    self:OnComponent(button_custom_id, listener)
+end
+
+function client.client_methods.slash_command(self: Bot, arguments: types.slash_command_args, listener: (interaction: interaction.interaction) -> (), guilds: {string}?): {types.slash_command}?
     local is_guild = type(guilds) == "table" and next(guilds) ~= nil
 
     local endpoints = {}

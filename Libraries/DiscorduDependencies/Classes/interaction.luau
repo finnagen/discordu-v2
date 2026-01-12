@@ -22,8 +22,8 @@ type interaction_variables = {
     _last_message: types.message?,
 }
 
-export type Command_Interaction = types.command_interaction & interaction_methods & interaction_variables
-export type Interaction = Command_Interaction
+export type interaction = types.interaction & interaction_methods & interaction_variables
+export type Interaction = interaction
 
 --// MODULES
 local interaction = {}
@@ -49,7 +49,7 @@ function Methods.send(self: Interaction, message: types.message_args, reply_to_l
     return posted_message
 end
 
-function interaction.CommandInteraction(bot: Bot, interaction_data: types.command_interaction): CommandInteraction
+function interaction.CommandInteraction(bot: Bot, interaction_data: types.interaction): CommandInteraction
     interaction_data._bot = bot
     return setmetatable(interaction_data, Methods)
 end

@@ -52,7 +52,9 @@ type private_variables = {
 
 type connections = {
     _tasks: {{[string]: thread}},
+
     _event_listeners: {[string]: (...any) -> ()},
+    _component_listeners: {[string]: (...any) -> ()},
 }
 
 type bot_methods = {
@@ -60,6 +62,7 @@ type bot_methods = {
     NetRequest: (self: Bot, method: string, url_path: string, body: any?, headers: {[string]: string}?) -> any?,
     End: (self: Bot) -> (),
     On: (self: Bot, event: string, callback: (...any) -> ()) -> (),
+    OnComponent: (self: Bot, custom_id: string, callback: (any) -> ()) -> (),
     
     DisconnectListener: (self: Bot, event: string) -> (),
     DisconnectTask: (self: Bot, task_to_cancel: string) -> (),

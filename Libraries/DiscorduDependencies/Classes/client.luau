@@ -156,8 +156,13 @@ function client.client_methods.On(self: Bot, event: string, callback: (...any) -
     self._event_listeners[string.lower(event)] = callback
 end
 
+function client.client_methods.OnComponent(self: Bot, custom_id: string, callback: (interaction: interaction.interaction) -> ())
+    self._component_listeners[string.lower(custom_id)] = callback
+end
+
 function client.client_methods.DisconnectListener(self: Bot, event: string)
     self._event_listeners[string.lower(event)] = nil
+    self._component_listeners[string.lower(event)] = nil
 end
 
 function client.client_methods.DisconnectTask(self: Bot, task_to_cancel: string): ()
@@ -252,7 +257,7 @@ function client.client_methods._StartEventHandling(self: Bot, shard: number): ()
                             IdentifyProcesses = nil
                         end
                     elseif decoded_event.t == 'INTERACTION_CREATE' then
-                        local interaction_obj: types.command_interaction = decoded_event.d
+                        local interaction_obj: types.interaction = decoded_event.d
 
                         local time_in_ms = DateTime.now().unixTimestampMillis
                         local latency = (time_in_ms-snowflake_to_epoch(interaction_obj.id))/1000
@@ -261,8 +266,17 @@ function client.client_methods._StartEventHandling(self: Bot, shard: number): ()
 
                         for k, v in self._event_listeners do
                             if k == interaction_obj.data.name then
-                                local command_interaction: interaction.Command_Interaction = interaction.CommandInteraction(self, interaction_obj)
-                                v(command_interaction, shard)
+                                local interaction: interaction.interaction = interaction.CommandInteraction(self, interaction_obj)
+                                v(interaction, shard)
+                            end
+                        end
+
+                        if interaction_obj.data.custom_id ~= nil then
+                            for k, v in self._component_listeners do
+                                if k == interaction_obj.data.custom_id then
+                                    local interaction: interaction.interaction = interaction.CommandInteraction(self, interaction_obj)
+                                    v(interaction, shard)
+                                end
                             end
                         end
                     end
@@ -334,6 +348,14 @@ function client.client_methods.NetRequest(self: Bot, method: string, url_path: s
 
     local request_result = net.request(packet)
     if request_result.statusCode >= 400 then
+        if request_result.statusCode == 429 then
+            local retry_after = request_result.body.retry_after
+            task.delay(retry_after, function()
+                self:NetRequest(method, url_path, body, headers)
+            end)
+
+            return
+        end
         error(`NETREQUEST ERROR CODE {request_result.statusCode} | DETAILS: {request_result.statusMessage}.\nBODY RETURNED:\n{request_result.body}`)
     end
 
@@ -370,6 +392,7 @@ function client.New(token: string, intents: discordu_intents.Intent?, shard_coun
 
         _tasks = {},
         _event_listeners = {},
+        _component_listeners = {},
 
         _shards = {},
         _gateways = {},
