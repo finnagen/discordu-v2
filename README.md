@@ -1,5 +1,5 @@
 # discordu-v2
-Docs are outdated...
+WARNING: Do not expect these docs to be very helpful... they are unfinished and very bare bones. I will make a documentation site whenever I feel like it (in 7 years, probably).
 
 An advanced Discord API wrapper written entirely in luau.
 # Overview
